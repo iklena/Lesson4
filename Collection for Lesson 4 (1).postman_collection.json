@@ -1,0 +1,2036 @@
+{
+  "info": {
+    "_postman_id": "c727815a-e79d-4290-a732-1608b342c70e",
+    "name": "Collection for Lesson 4",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "55147410",
+    "_collection_link": "https://go.postman.co/collection/55147410-c727815a-e79d-4290-a732-1608b342c70e?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Create and delete a list",
+      "item": [
+        {
+          "name": "Negative tests",
+          "item": [
+            {
+              "name": "Create a list with non-unique name",
+              "item": [
+                {
+                  "name": "Create the first list",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});\r",
+                          "\r",
+                          "var body = pm.response.json();\r",
+                          "pm.collectionVariables.set(\"list_name_non_uniq\", body.name);\r",
+                          "pm.collectionVariables.set(\"list_id_nq1\", body.id);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
+                          "pm.collectionVariables.unset(\"rndNum\");\r",
+                          "\r",
+                          "var rndNum = Math.floor(Math.random() * 1000000);\r",
+                          "pm.collectionVariables.set(\"rndNum\", rndNum);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "value",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "content-type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"tst_{{rndNum}}\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "folder",
+                        "{{folder_id}}",
+                        "list"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Create the list with the same name",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", function () {\r",
+                          "    pm.response.to.have.status(400);\r",
+                          "});\r",
+                          "\r",
+                          "var body = pm.response.json();\r",
+                          "\r",
+                          "pm.test(\"List name is not unique\", function () {\r",
+                          "    pm.expect(body.err).to.eql(\"List name taken\");\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
+                          ""
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "value",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "content-type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"{{list_name_non_uniq}}\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "folder",
+                        "{{folder_id}}",
+                        "list"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete the first list",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{app_url}}/list/{{list_id_nq1}}",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "list",
+                        "{{list_id_nq1}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Create a list without a name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "var body = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"List Name Invalid\", function () {\r",
+                      "    pm.expect(body.err).to.eql(\"List Name Invalid\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}"
+                  },
+                  {
+                    "key": "accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                  "host": [
+                    "{{app_url}}"
+                  ],
+                  "path": [
+                    "folder",
+                    "{{folder_id}}",
+                    "list"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create a list without autorization",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "var body = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Authorization header required\", function () {\r",
+                      "    pm.expect(body.err).to.eql(\"Authorization header required\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "apikey",
+                  "apikey": [
+                    {
+                      "key": "value",
+                      "value": "",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}",
+                    "disabled": true
+                  },
+                  {
+                    "key": "accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"test\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                  "host": [
+                    "{{app_url}}"
+                  ],
+                  "path": [
+                    "folder",
+                    "{{folder_id}}",
+                    "list"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create a list with incorrect token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 401\", function () {\r",
+                      "    pm.response.to.have.status(401);\r",
+                      "});\r",
+                      "\r",
+                      "var body = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Token is invalid\", function () {\r",
+                      "    pm.expect(body.err).to.eql(\"Token invalid\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                },
+                {
+                  "listen": "prerequest",
+                  "script": {
+                    "exec": [
+                      ""
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "pk_402428217_Q6U73TNNC7DOXRZKJBLJS0AXZJS0L3U0"
+                  },
+                  {
+                    "key": "accept",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "content-type",
+                    "value": "application/json"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n    \"name\": \"test\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                  "host": [
+                    "{{app_url}}"
+                  ],
+                  "path": [
+                    "folder",
+                    "{{folder_id}}",
+                    "list"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete the list with invalid id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"List ID is invalid\", function () {\r",
+                      "    var body = pm.response.json();\r",
+                      "    pm.expect(body.err).to.eql(\"validateListIDEx List ID invalid\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}"
+                  },
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json"
+                  },
+                  {
+                    "key": "accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{app_url}}/list/{{list_id_n1}}",
+                  "host": [
+                    "{{app_url}}"
+                  ],
+                  "path": [
+                    "list",
+                    "{{list_id_n1}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Create a list with a random name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "var body = pm.response.json();\r",
+                  "pm.collectionVariables.set(\"list_id\", body.id);\r",
+                  "\r",
+                  "pm.test(\"List has the correct name\", function () {\r",
+                  "    pm.expect(body.name).to.eql(\"tst_\" + pm.collectionVariables.get(\"rndNum\"));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.unset(\"rndNum\");\r",
+                  "\r",
+                  "var rndNum = Math.floor(Math.random() * 1000000);\r",
+                  "pm.collectionVariables.set(\"rndNum\", rndNum);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"tst_{{rndNum}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{app_url}}/folder/{{folder_id}}/list",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "folder",
+                "{{folder_id}}",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete the created list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{app_url}}/list/{{list_id}}",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "list",
+                "{{list_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Get lists of a folder",
+      "item": [
+        {
+          "name": "Negative tests",
+          "item": [
+            {
+              "name": "Get lists of the invalid folder",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"Folder ID is invalid\", function () {\r",
+                      "    var body = pm.response.json();\r",
+                      "    pm.expect(body.err).to.eql(\"Folder ID invalid\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}"
+                  },
+                  {
+                    "key": "accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{app_url}}/folder/{{folder_id1}}/list",
+                  "host": [
+                    "{{app_url}}"
+                  ],
+                  "path": [
+                    "folder",
+                    "{{folder_id1}}",
+                    "list"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get lists of a folder with incorrect token",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 401\", function () {\r",
+                      "    pm.response.to.have.status(401);\r",
+                      "});\r",
+                      "\r",
+                      "var body = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Token is invalid\", function () {\r",
+                      "    pm.expect(body.err).to.eql(\"Token invalid\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "noauth"
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "pk_402428217_Q6U73TNNC7DOXRZKJBLJS0AXZJS0L3U0"
+                  },
+                  {
+                    "key": "accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                  "host": [
+                    "{{app_url}}"
+                  ],
+                  "path": [
+                    "folder",
+                    "{{folder_id}}",
+                    "list"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Create a list in a folder",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "var body = pm.response.json();\r",
+                  "pm.collectionVariables.set(\"list_id1\", body.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.unset(\"rndNum\");\r",
+                  "\r",
+                  "var rndNum = Math.floor(Math.random() * 1000000);\r",
+                  "pm.collectionVariables.set(\"rndNum\", rndNum);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"tst_{{rndNum}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{app_url}}/folder/{{folder_id}}/list",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "folder",
+                "{{folder_id}}",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get lists of a folder",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "var body = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"List contains the correct Folder ID\", function () {\r",
+                  "    pm.expect(body.lists[0].folder.id).to.eql(pm.environment.get(\"folder_id\")); \r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"List has the correct ID\", function () {\r",
+                  "    pm.expect(body.lists[0].id).to.eql(pm.collectionVariables.get(\"list_id1\")); \r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "packages": {},
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{app_url}}/folder/{{folder_id}}/list",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "folder",
+                "{{folder_id}}",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete the list from folder",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{app_url}}/list/{{list_id1}}",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "list",
+                "{{list_id1}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Get a list info",
+      "item": [
+        {
+          "name": "Negative tests",
+          "item": [
+            {
+              "name": "Get a list info with invalid token",
+              "item": [
+                {
+                  "name": "Create a list",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});\r",
+                          "\r",
+                          "var body = pm.response.json();\r",
+                          "pm.collectionVariables.set(\"list_id_n2\", body.id);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
+                          "pm.collectionVariables.unset(\"rndNum\");\r",
+                          "\r",
+                          "var rndNum = Math.floor(Math.random() * 1000000);\r",
+                          "pm.collectionVariables.set(\"rndNum\", rndNum);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "value",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "content-type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"tstst_{{rndNum}}\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "folder",
+                        "{{folder_id}}",
+                        "list"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Get a list info with invalid token",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 401\", function () {\r",
+                          "    pm.response.to.have.status(401);\r",
+                          "});\r",
+                          "\r",
+                          "var body = pm.response.json();\r",
+                          "\r",
+                          "pm.test(\"Token is invalid\", function () {\r",
+                          "    pm.expect(body.err).to.eql(\"Token invalid\");\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "noauth"
+                    },
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "pk_402428217_Q6U73TNNC7DOXRZKJBLJS0AXZJS0L3U0"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{app_url}}/list/{{list_id_n2}}",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "list",
+                        "{{list_id_n2}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete the created list",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{app_url}}/list/{{list_id_n2}}",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "list",
+                        "{{list_id_n2}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            },
+            {
+              "name": "Get a list info with invalid list_id",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "pm.test(\"Status code is 400\", function () {\r",
+                      "    pm.response.to.have.status(400);\r",
+                      "});\r",
+                      "\r",
+                      "pm.test(\"List ID is invalid\", function () {\r",
+                      "    var body = pm.response.json();\r",
+                      "    pm.expect(body.err).to.eql(\"validateListIDEx List ID invalid\");\r",
+                      "});"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Authorization",
+                    "value": "{{token}}"
+                  },
+                  {
+                    "key": "accept",
+                    "value": "application/json"
+                  }
+                ],
+                "url": {
+                  "raw": "{{app_url}}/list/{{list_id_inv}}",
+                  "host": [
+                    "{{app_url}}"
+                  ],
+                  "path": [
+                    "list",
+                    "{{list_id_inv}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Create a list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "var body = pm.response.json();\r",
+                  "pm.collectionVariables.set(\"list_id2\", body.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.unset(\"rndNum\");\r",
+                  "\r",
+                  "var rndNum = Math.floor(Math.random() * 1000000);\r",
+                  "pm.collectionVariables.set(\"rndNum\", rndNum);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"tstst_{{rndNum}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{app_url}}/folder/{{folder_id}}/list",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "folder",
+                "{{folder_id}}",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get a list info",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "var body = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"List contains correct ID\", function () {\r",
+                  "    pm.expect(body.id).to.eql(pm.collectionVariables.get(\"list_id2\"));\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"List contains correct folder ID\", function () {\r",
+                  "    pm.expect(body.folder.id).to.eql(pm.environment.get(\"folder_id\"));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{app_url}}/list/{{list_id2}}",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "list",
+                "{{list_id2}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete the created list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{app_url}}/list/{{list_id2}}",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "list",
+                "{{list_id2}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Update a list",
+      "item": [
+        {
+          "name": "Negative tests",
+          "item": [
+            {
+              "name": "Update a list name to some not unique one",
+              "item": [
+                {
+                  "name": "Create a list 1",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});\r",
+                          "\r",
+                          "var body = pm.response.json();\r",
+                          "pm.collectionVariables.set(\"list_id_n3\", body.id);\r",
+                          "pm.collectionVariables.set(\"list_name_n3\", body.name);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
+                          "pm.collectionVariables.unset(\"rndNum\");\r",
+                          "\r",
+                          "var rndNum = Math.floor(Math.random() * 1000000);\r",
+                          "pm.collectionVariables.set(\"rndNum\", rndNum);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "value",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "content-type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"tst_{{rndNum}}\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "folder",
+                        "{{folder_id}}",
+                        "list"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Create a list 2",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});\r",
+                          "\r",
+                          "var body = pm.response.json();\r",
+                          "pm.collectionVariables.set(\"list_id_n4\", body.id);\r",
+                          "pm.collectionVariables.set(\"list_name_n4\", body.name);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
+                          "pm.collectionVariables.unset(\"rndNum\");\r",
+                          "\r",
+                          "var rndNum = Math.floor(Math.random() * 1000000);\r",
+                          "pm.collectionVariables.set(\"rndNum\", rndNum);"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "auth": {
+                      "type": "apikey",
+                      "apikey": [
+                        {
+                          "key": "value",
+                          "value": "{{token}}",
+                          "type": "string"
+                        }
+                      ]
+                    },
+                    "method": "POST",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "content-type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"tst_{{rndNum}}\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{app_url}}/folder/{{folder_id}}/list",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "folder",
+                        "{{folder_id}}",
+                        "list"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Update a list name 1 to name 2",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 400\", function () {\r",
+                          "    pm.response.to.have.status(400);\r",
+                          "});\r",
+                          "\r",
+                          "var body = pm.response.json();\r",
+                          "\r",
+                          "pm.test(\"List name is taken\", function () {\r",
+                          "    pm.expect(body.err).to.eql(\"List name taken\");\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    },
+                    {
+                      "listen": "prerequest",
+                      "script": {
+                        "exec": [
+                          "pm.collectionVariables.get(\"list_name_n4\");"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "PUT",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "content-type",
+                        "value": "application/json"
+                      }
+                    ],
+                    "body": {
+                      "mode": "raw",
+                      "raw": "{\r\n    \"name\": \"{{list_name_n4}}\"\r\n}",
+                      "options": {
+                        "raw": {
+                          "language": "json"
+                        }
+                      }
+                    },
+                    "url": {
+                      "raw": "{{app_url}}/list/{{list_id_n3}}",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "list",
+                        "{{list_id_n3}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete list 1",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{app_url}}/list/{{list_id_n3}}",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "list",
+                        "{{list_id_n3}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                },
+                {
+                  "name": "Delete list 2",
+                  "event": [
+                    {
+                      "listen": "test",
+                      "script": {
+                        "exec": [
+                          "pm.test(\"Status code is 200\", function () {\r",
+                          "    pm.response.to.have.status(200);\r",
+                          "});"
+                        ],
+                        "type": "text/javascript",
+                        "packages": {},
+                        "requests": {}
+                      }
+                    }
+                  ],
+                  "request": {
+                    "method": "DELETE",
+                    "header": [
+                      {
+                        "key": "Authorization",
+                        "value": "{{token}}"
+                      },
+                      {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                      },
+                      {
+                        "key": "accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{app_url}}/list/{{list_id_n4}}",
+                      "host": [
+                        "{{app_url}}"
+                      ],
+                      "path": [
+                        "list",
+                        "{{list_id_n4}}"
+                      ]
+                    }
+                  },
+                  "response": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Create a list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "var body = pm.response.json();\r",
+                  "pm.collectionVariables.set(\"list_id3\", body.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.collectionVariables.unset(\"rndNum\");\r",
+                  "\r",
+                  "var rndNum = Math.floor(Math.random() * 1000000);\r",
+                  "pm.collectionVariables.set(\"rndNum\", rndNum);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "value",
+                  "value": "{{token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"tst_{{rndNum}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{app_url}}/folder/{{folder_id}}/list",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "folder",
+                "{{folder_id}}",
+                "list"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update a list name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "var body = pm.response.json();\r",
+                  "\r",
+                  "pm.test(\"List contains the same ID\", function () {\r",
+                  "    pm.expect(body.id).to.eql(pm.collectionVariables.get(\"list_id3\"));\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"List contains the updated name\", function () {\r",
+                  "    pm.expect(body.name).to.eql(pm.collectionVariables.get(\"list_name3\"));\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "var rndNum_upd = Math.floor(Math.random() * 1000000);\r",
+                  "\r",
+                  "pm.collectionVariables.set(\"list_name3\", \"tst_\" + rndNum_upd);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "content-type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"{{list_name3}}\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{app_url}}/list/{{list_id3}}",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "list",
+                "{{list_id3}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete the created list",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{app_url}}/list/{{list_id3}}",
+              "host": [
+                "{{app_url}}"
+              ],
+              "path": [
+                "list",
+                "{{list_id3}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "value",
+        "value": "{{token}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "list_id",
+      "value": ""
+    },
+    {
+      "key": "list_id1",
+      "value": ""
+    },
+    {
+      "key": "list_id2",
+      "value": ""
+    },
+    {
+      "key": "list_id3",
+      "value": ""
+    },
+    {
+      "key": "list_name3",
+      "value": ""
+    },
+    {
+      "key": "rndNum",
+      "value": ""
+    },
+    {
+      "key": "rndNum_upd",
+      "value": ""
+    },
+    {
+      "key": "list_name_non_uniq",
+      "value": ""
+    },
+    {
+      "key": "list_id_nq1",
+      "value": ""
+    },
+    {
+      "key": "list_id_n2",
+      "value": ""
+    },
+    {
+      "key": "list_id_n3",
+      "value": ""
+    },
+    {
+      "key": "list_name_n3",
+      "value": ""
+    },
+    {
+      "key": "list_id_n4",
+      "value": ""
+    },
+    {
+      "key": "list_name_n4",
+      "value": ""
+    }
+  ]
+}
